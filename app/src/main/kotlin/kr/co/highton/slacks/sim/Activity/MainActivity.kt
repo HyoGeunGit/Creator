@@ -38,7 +38,10 @@ class MainActivity : BaseActivity() {
         mws.javaScriptEnabled = true//자바스크립트 허용
         mws.loadWithOverviewMode = true//컨텐츠가 웹뷰보다 클 경우 스크린 크기에 맞게 조정
         logo.setOnClickListener {
-      //      startActivity(Intent(this@MainActivity, 형이 추가할 액티비티 ::class.java))
+           startActivity(Intent(this@MainActivity, DesignActivity::class.java))
+        }
+        fab.setOnClickListener {
+            startActivity(Intent(this@MainActivity, WriteActivity::class.java))
         }
         mwv!!.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {

@@ -35,6 +35,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity.LoginActivity"/>
+        <activity android:name=".Activity.DesignActivity"/>
+        <activity android:name=".Activity.WriteActivity"/>
         <activity android:name=".Activity.MainActivity"/>
         <activity android:name=".Activity.SignUpActivity"/>
         <activity android:name="com.gun0912.tedpermission.TedPermissionActivity" android:configChanges="mcc|mnc|locale|keyboard|keyboardHidden|screenLayout|fontScale|uiMode|orientation|screenSize|layoutDirection" android:screenOrientation="unspecified" android:theme="@style/Theme.Transparent.Permission" tools:replace="android:screenOrientation"/>
