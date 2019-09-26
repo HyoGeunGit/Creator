@@ -7,11 +7,14 @@ import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import kotlinx.android.synthetic.main.activity_login.*
 import kr.co.highton.slacks.sim.R
-import kr.co.highton.slacks.sim.Repo.LoginRepo
 import kr.co.highton.slacks.sim.Retrofit.Client
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
+/**
+ * Created by Kinetic on 2018-06-02.
+ */
 
 class LoginActivity : BaseActivity() {
 
@@ -31,36 +34,21 @@ class LoginActivity : BaseActivity() {
                 .setDeniedMessage("설정] > [권한] 에서 권한을 허용할 수 있습니다.")
                 .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
                 .check()
-        
-        logo.bringToFront()
 
         login_btn.setOnClickListener {
-            Client.retrofitService.logIn(id_tv.text.toString(), pw_tv.text.toString()).enqueue(object : Callback<LoginRepo> {
-                override fun onResponse(call: Call<LoginRepo>?, response: Response<LoginRepo>?) {
-                    System.out.println("LOGD : "+response!!.body()!!.status + " : status type String?")
+            Client.retrofitService.logIn(id_tv.text.toString(), pw_tv.text.toString()).enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
                     when (response!!.code()) {
                         200 -> {
-                            when {
-                                response.body()!!.status.toInt() == 200 -> {
-                                    finish()
-                                    startActivity (Intent(this@LoginActivity, MainActivity::class.java))
-                                }
-                                response.body()!!.status.toInt() == 400 -> Toast.makeText(this@LoginActivity, "로그인 실패 : 아이디나 비번이 올바르지 않습니다", Toast.LENGTH_LONG).show()
-                            }
-//                            when(response.body()!!.status){
-//                                200->{
-//                                    finish()
-//                                    startActivity (Intent(this@LoginActivity, MainActivity::class.java))
-//                                }
-//                                400 -> Toast.makeText(this@LoginActivity, "로그인 실패 : 아이디나 비번이 올바르지 않습니다", Toast.LENGTH_LONG).show()
-//                                500 -> Toast.makeText(this@LoginActivity, "로그인 실패 : 서버 오류", Toast.LENGTH_LONG).show()
-//
-//                            }
+                            finish()
+                            startActivity (Intent(this@LoginActivity, MainActivity::class.java))
                         }
+                        405 -> Toast.makeText(this@LoginActivity, "로그인 실패 : 아이디나 비번이 올바르지 않습니다", Toast.LENGTH_LONG).show()
+                        500 -> Toast.makeText(this@LoginActivity, "로그인 실패 : 서버 오류", Toast.LENGTH_LONG).show()
                     }
                 }
 
-                override fun onFailure(call: Call<LoginRepo>?, t: Throwable?) {
+                override fun onFailure(call: Call<Void>?, t: Throwable?) {
 
                 }
 
@@ -68,7 +56,7 @@ class LoginActivity : BaseActivity() {
             })
         }
 
-        signup_go.setOnClickListener { startActivity(Intent(this@LoginActivity, SignUpActivity::class.java)) }
+        signup_go2.setOnClickListener { startActivity(Intent(this@LoginActivity, SignUpActivity::class.java)) }
     }
 
 }

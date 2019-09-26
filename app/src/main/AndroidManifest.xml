@@ -27,14 +27,15 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBNhjyAWxKfCkJ7CSAHzaeStCJHmMmhHq8" />
 
-        <activity android:name=".Activity.MainActivity">
+        <activity android:name=".Activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<!--        <activity android:name=".Activity.MainActivity"/>-->
+        <activity android:name=".Activity.LoginActivity"/>
+        <activity android:name=".Activity.MainActivity"/>
         <activity android:name=".Activity.SignUpActivity"/>
         <activity android:name="com.gun0912.tedpermission.TedPermissionActivity" android:configChanges="mcc|mnc|locale|keyboard|keyboardHidden|screenLayout|fontScale|uiMode|orientation|screenSize|layoutDirection" android:screenOrientation="unspecified" android:theme="@style/Theme.Transparent.Permission" tools:replace="android:screenOrientation"/>
 

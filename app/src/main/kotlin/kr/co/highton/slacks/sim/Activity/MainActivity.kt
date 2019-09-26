@@ -1,21 +1,29 @@
 package kr.co.highton.slacks.sim.Activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
+import android.util.Xml
+import android.view.KeyEvent
 import android.view.View
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_main.*
 import kr.co.highton.slacks.sim.Fragment.BeautyWebviewFragment
 import kr.co.highton.slacks.sim.Fragment.ChatWebViewFragment
 import kr.co.highton.slacks.sim.Fragment.SettingWebViewFragment
 import kr.co.highton.slacks.sim.Fragment.WriteWebViewFragment
 import kr.co.highton.slacks.sim.R
+import java.net.URLEncoder
 
 class MainActivity : BaseActivity() {
 
+    private var mwv: WebView? = null//Mobile Web View
     override var viewId: Int = R.layout.activity_main
     override var toolbarId: Int? = R.id.toolbar
     private lateinit var toast: Toast
@@ -24,84 +32,30 @@ class MainActivity : BaseActivity() {
 
     @SuppressLint("ShowToast")
     override fun onCreate() {
-        showActionBar()
-
-        toast = Toast.makeText(this, getString(R.string.press_back_button_one_more), Toast.LENGTH_SHORT)
-
-        mViewPager = findViewById(R.id.viewPager)
-        mViewPager!!.adapter = PagerAdapter(supportFragmentManager)
-        mViewPager!!.currentItem = 0
-
-        val tabLayout = findViewById<View>(R.id.tabs) as TabLayout
-        tabLayout.setupWithViewPager(mViewPager)
-
-        // set icons
-        tabLayout.getTabAt(0)!!.text = "Wrire"
-        tabLayout.getTabAt(1)!!.text = "Chat"
-        tabLayout.getTabAt(2)!!.text = "Beauty"
-        tabLayout.getTabAt(3)!!.text = "Setting"
-
-        mViewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) = tab.select()
-
-            override fun onTabUnselected(tab: TabLayout.Tab) {
-
+        mwv = findViewById(R.id.WebView) as WebView
+        val mws = mwv!!.settings//Mobile Web Setting
+//        var str = "email=" + URLEncoder.encode("shimhg02@naver.com", "UTF-8") + "&member_srl=" + URLEncoder.encode("69", "UTF-8")
+        mws.javaScriptEnabled = true//자바스크립트 허용
+        mws.loadWithOverviewMode = true//컨텐츠가 웹뷰보다 클 경우 스크린 크기에 맞게 조정
+        logo.setOnClickListener {
+      //      startActivity(Intent(this@MainActivity, 형이 추가할 액티비티 ::class.java))
+        }
+        mwv!!.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                view.loadUrl(url)
+                return true
             }
-
-            override fun onTabReselected(tab: TabLayout.Tab) {
-
-            }
-        })
-
-       /* viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-
-            override fun onPageScrollStateChanged(state: Int) {
-
-            }
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-
-            }
-
-            override fun onPageSelected(position: Int) {
-
-            }
-        })*/
+        }
+//        System.out.println("(LOGD) : "+str.toByteArray())
+        mwv!!.loadUrl("https://creator.hoto.dev/open_board.php?email=shimhg02@naver.com&member_srl=69")
     }
-
-    override fun onBackPressed() {
-
-        if (System.currentTimeMillis() > backKeyPressedTime + 500) {
-            backKeyPressedTime = System.currentTimeMillis()
-            toast.show()
-            return
-        }
-
-        if (System.currentTimeMillis() <= backKeyPressedTime + 500) {
-            toast.cancel()
-            this.finish()
-        }
-    }
-
-    inner class PagerAdapter(supportFragmentManager: FragmentManager) : FragmentStatePagerAdapter(supportFragmentManager) {
-
-        override fun getItem(position: Int): Fragment? {
-
-            return when (position) {
-                0 ->
-                    WriteWebViewFragment()
-                1 ->
-                    ChatWebViewFragment()
-                2 ->
-                    BeautyWebviewFragment()
-                3 ->
-                    SettingWebViewFragment()
-                else ->
-                    null
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (mwv!!.canGoBack()) {
+                mwv!!.goBack()
+                return false
             }
         }
-
-        override fun getCount(): Int = 4
+        return super.onKeyDown(keyCode, event)
     }
 }
